@@ -7,7 +7,7 @@ interface Props {
 const AssemblyLine: React.FC<Props> = ({ stages }) => {
   return (
     <div>
-      <div>
+      <div className="bg-gray-300 p-2">
         <h2>add an item</h2>
       </div>
     </div>
