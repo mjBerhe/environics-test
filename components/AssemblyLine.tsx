@@ -18,10 +18,6 @@ const AssemblyLine: React.FC<Props> = ({ stages }) => {
     }
   }, [stages]);
 
-  useEffect(() => {
-    console.log(stageItems);
-  }, [stageItems]);
-
   const handleAddItem = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       const tempStageItems = stageItems;
@@ -84,15 +80,16 @@ const AssemblyLine: React.FC<Props> = ({ stages }) => {
           {stages?.map((stage, i) => (
             <div
               key={stage}
-              className="assembly-stage px-4 flex flex-col border border-red-300"
+              className="assembly-stage px-4 flex flex-col items-center"
             >
-              <h3 className="text-lg">{stage}</h3>
+              <h3 className="text-xl font-bold">{stage}</h3>
               {stageItems[i]?.map((item, j) => (
                 <button
                   name={item}
                   key={`${item} - ${j}`}
                   onClick={(e) => handleItemMove(e, i, j)}
                   onContextMenu={(e) => handleItemMove(e, i, j)}
+                  className="assembly-item"
                 >
                   {item}
                 </button>
