@@ -31,6 +31,42 @@ const AssemblyLine: React.FC<Props> = ({ stages }) => {
     }
   };
 
+  const handleItemMove = (
+    e: React.MouseEvent<HTMLElement>,
+    stageIndex: number,
+    groupIndex: number
+  ) => {
+    e.preventDefault();
+    if (e.type === "click") {
+      handleMoveRight(stageIndex, groupIndex);
+    }
+    if (e.type === "contextmenu") {
+      handleMoveLeft(stageIndex, groupIndex);
+    }
+  };
+
+  const handleMoveRight = (stageIndex: number, groupIndex: number) => {
+    const tempStageItems = [...stageItems];
+    const item = tempStageItems[stageIndex][groupIndex];
+
+    tempStageItems[stageIndex].splice(groupIndex, 1);
+    if (tempStageItems[stageIndex + 1]) {
+      tempStageItems[stageIndex + 1].unshift(item);
+    }
+    setStageItems(tempStageItems);
+  };
+
+  const handleMoveLeft = (stageIndex: number, groupIndex: number) => {
+    const tempStageItems = [...stageItems];
+    const item = tempStageItems[stageIndex][groupIndex];
+
+    tempStageItems[stageIndex].splice(groupIndex, 1);
+    if (tempStageItems[stageIndex - 1]) {
+      tempStageItems[stageIndex - 1].push(item);
+    }
+    setStageItems(tempStageItems);
+  };
+
   return (
     <div className="min-h-screen">
       <div className="flex flex-col divide-y space-y-4 p-10">
@@ -38,7 +74,7 @@ const AssemblyLine: React.FC<Props> = ({ stages }) => {
           <label htmlFor="">Add an item:</label>
           <input
             type="text"
-            className="outline-none ml-4 p-1 border border-white"
+            className="assembly-add-item outline-none ml-4 p-1 border border-white"
             value={itemInput}
             onChange={(e) => setItemInput(e.target.value)}
             onKeyPress={handleAddItem}
@@ -48,11 +84,18 @@ const AssemblyLine: React.FC<Props> = ({ stages }) => {
           {stages?.map((stage, i) => (
             <div
               key={stage}
-              className="px-4 flex flex-col border border-red-300"
+              className="assembly-stage px-4 flex flex-col border border-red-300"
             >
               <h3 className="text-lg">{stage}</h3>
-              {stageItems[i]?.map((item) => (
-                <span key={item}>{item}</span>
+              {stageItems[i]?.map((item, j) => (
+                <button
+                  name={item}
+                  key={`${item} - ${j}`}
+                  onClick={(e) => handleItemMove(e, i, j)}
+                  onContextMenu={(e) => handleItemMove(e, i, j)}
+                >
+                  {item}
+                </button>
               ))}
             </div>
           ))}
